@@ -44,6 +44,7 @@
         [
 		  alacritty-theme
           pkgs.alacritty
+		  pkgs.elixir_1_18
           pkgs.fish
           pkgs.git
 		  pkgs.mkalias
@@ -63,6 +64,7 @@
 	  homebrew = {
 		enable = true;
 		casks = [
+		  "amethyst"
 		  "discord"
 		  "firefox"
 		  "jandedobbeleer/oh-my-posh/oh-my-posh"
