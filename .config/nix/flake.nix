@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.url = "github:LnL7/nix-darwin/ebb88c3428dcdd95c06dca4d49b9791a65ab777b";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 	nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
@@ -50,9 +50,12 @@
 		  pkgs.mkalias
           pkgs.neovim
           pkgs.nodejs
+		  pkgs.postgresql_16
 		  pkgs.ripgrep
           pkgs.stow
 		  pkgs.tmux
+		  pkgs.twitch-cli
+		  pkgs.yarn
 		  pkgs.zoxide
 		  tmuxplugins
         ];
@@ -67,6 +70,7 @@
 		  "amethyst"
 		  "discord"
 		  "firefox"
+		  "google-chrome"
 		  "jandedobbeleer/oh-my-posh/oh-my-posh"
 		  "notion"
 		  "obs"
@@ -95,6 +99,22 @@
           ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
         done
             '';
+	
+	  system.activationScripts.preActivation = {
+		enable = true;
+		text = ''
+		  if [ ! -d "var/lib/postgresql" ]; then
+		    echo "creating postgresql data directory..."
+			sudo mkdir -m 750 -p /var/lib/postgresql/
+			chown -R arze:staff /var/lib/postgresql/
+		  fi
+		'';
+	  };
+
+	  services.postgresql = {
+		enable = true;
+		package = pkgs.postgresql_16;
+	  };
 
 	  system.defaults = {
 	    dock.autohide = true;
